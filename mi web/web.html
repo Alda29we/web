@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1d202eb9;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.5em;
+        }
+        
+        .search-bar {
+            display: flex;
+        }
+        .search-bar input {
+            padding: 0.5em;
+            font-size: 1em;
+            border: none;
+        }
+
+        .search-bar button {
+            padding: 0.5em 1em;
+            font-size: 1em;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart {
+            background-color: #ff5722;
+            padding: 0.5em 1em;
+            cursor: pointer;
+        }
+
+        main {
+            padding: 2em;
+            text-align: center;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2em;
+        }
+
+        .category {
+            width: 150px;
+        }
+
+        .category img {
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        .products {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .product {
+            background-color: rgba(112, 179, 147, 0.712);
+            padding: 1em;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+        }
+
+        .product img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .add-to-cart {
+            background-color: #28a745;
+            color: white;
+            padding: 0.5em;
+            border: none;
+            cursor: pointer;
+            margin-top: 1em;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Tienda Online</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar productos...">
+            <button>Buscar</button>
+        </div>
+        <div class="cart">
+            <button id="cart-btn">Cesta de compras (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <main>
+        <h2>Compra por categorías</h2>
+        <div class="categories">
+            <div class="category">
+                <img src="img/SamsungS24Ultra.avif" alt="Celulares">
+                <h3>Celulares</h3>
+            </div>
+            <div class="category">
+                <img src="img/AppleWatch.png" alt="Smartwatches">
+                <h3>Smartwatches</h3>
+            </div>
+            <div class="category">
+                <img src="img/laptop.png" alt="Cómputo">
+                <h3>Cómputo</h3>
+            </div>
+            <div class="category">
+                <img src="img/steelseries.png" alt="Mundo gamer">
+                <h3>Mundo gamer</h3>
+            </div>
+            <div class="category">
+                <img src="img/MandoPS5.png" alt="Videojuegos">
+                <h3>Videojuegos</h3>
+            </div>
+            <div class="category">
+                <img src="img/silla.png" alt="Sillas gamer">
+                <h3>Sillas gamer</h3>
+            </div>
+        </div>
+
+        <h2>Productos destacados</h2>
+        <div class="products">
+            <div class="product">
+                <img src="img/iphone.png" alt="iPhone">
+                <h3>iPhone 13</h3>
+                <p>Precio: S/. 4,500</p>
+                <button class="add-to-cart" data-product="iPhone 13" data-price="4500">Añadir a la cesta</button>
+            </div>
+            <div class="product">
+                <img src="img/SamsungS24Ultra.avif" alt="Samsung Galaxy">
+                <h3>Samsung Galaxy S24</h3>
+                <p>Precio: S/. 3,800</p>
+                <button class="add-to-cart" data-product="Samsung Galaxy S24" data-price="3800">Añadir a la cesta</button>
+            </div>
+            <div class="product">
+                <img src="img/Xiaomi Mi 112.png" alt="Xiaomi Mi 11">
+                <h3>Xiaomi Mi 11</h3>
+                <p>Precio: S/. 2,500</p>
+                <button class="add-to-cart" data-product="Xiaomi Mi 11" data-price="2500">Añadir a la cesta</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Tienda Online. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        const cartBtn = document.getElementById('cart-btn');
+        const cartCount = document.getElementById('cart-count');
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const product = this.getAttribute('data-product');
+                const price = parseFloat(this.getAttribute('data-price'));
+
+                cart.push({ product, price });
+                cartCount.textContent = cart.length;
+
+                alert(`Has añadido ${product} a la cesta`);
+            });
+        });
+
+        cartBtn.addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Tu cesta está vacía.');
+            } else {
+                let total = 0;
+                let cartList = 'Tu cesta de compras:\n';
+
+                cart.forEach(item => {
+                    cartList += `- ${item.product}: S/. ${item.price}\n`;
+                    total += item.price;
+                });
+
+                cartList += `\nTotal: S/. ${total}`;
+                alert(cartList);
+            }
+        });
+    </script>
+</body>
+</html>
